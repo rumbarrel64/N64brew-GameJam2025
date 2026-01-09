@@ -3,11 +3,11 @@ BUILD_DIR=build
 T3D_INST=$(shell realpath ../..)
 
 include $(N64_INST)/include/n64.mk
-include $(T3D_INST)/t3d.mk
+include $(N64_INST)/include/t3d.mk
 
 N64_CFLAGS += -std=gnu2x -O2
 
-PROJECT_NAME=my_menu_game
+PROJECT_NAME=fallout_vault_64
 
 src = main.c
 
@@ -35,7 +35,7 @@ filesystem/%.font64: assets/%.ttf
 $(BUILD_DIR)/$(PROJECT_NAME).dfs: $(assets_conv)
 $(BUILD_DIR)/$(PROJECT_NAME).elf: $(src:%.c=$(BUILD_DIR)/%.o)
 
-$(PROJECT_NAME).z64: N64_ROM_TITLE="My N64 Menu"
+$(PROJECT_NAME).z64: N64_ROM_TITLE="Fallout Vault 64"
 $(PROJECT_NAME).z64: $(BUILD_DIR)/$(PROJECT_NAME).dfs
 
 clean:
