@@ -19,7 +19,7 @@ int main(void) {
 
         /* 3. Drawing */
         graphics_fill_screen(disp, graphics_make_color(0, 0, 50, 255));
-        graphics_set_color(0xFFFFFFFF, 0);
+        graphics_set_color(graphics_make_color(255, 255, 0, 255), 0);
 
         graphics_draw_text(disp, 80, 40, "Fallout Vault 64");
         graphics_draw_text(disp, 100, 100, (selected_option == 0) ? "> START" : "  START");
