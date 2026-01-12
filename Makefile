@@ -9,7 +9,7 @@ N64_CFLAGS += -std=gnu2x -O2
 
 PROJECT_NAME=fallout_vault_64
 
-src = main.c
+src = $(wildcard *.c)
 
 # These folders are required for your rules to work
 assets_png = $(wildcard assets/*.png)
