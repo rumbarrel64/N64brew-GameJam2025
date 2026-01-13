@@ -11,13 +11,15 @@ PROJECT_NAME=fallout_vault_64
 
 src = $(wildcard *.c)
 
-# These folders are required for your rules to work
+# Identify all source files in the assets folder
 assets_png = $(wildcard assets/*.png)
 assets_ttf = $(wildcard assets/*.ttf)
+assets_glb = $(wildcard assets/*.glb)
 
 # Conversion logic from your template
 assets_conv = $(addprefix filesystem/,$(notdir $(assets_png:%.png=%.sprite))) \
-              $(addprefix filesystem/,$(notdir $(assets_ttf:%.ttf=%.font64)))
+              $(addprefix filesystem/,$(notdir $(assets_ttf:%.ttf=%.font64)))\
+              $(addprefix filesystem/,$(notdir $(assets_glb:%.glb=%.t3dm)))
 
 all: $(PROJECT_NAME).z64
 
@@ -30,6 +32,13 @@ filesystem/%.sprite: assets/%.png
 filesystem/%.font64: assets/%.ttf
 	@mkdir -p $(dir $@)
 	$(N64_MKFONT) -s 9 -o filesystem "$<"
+
+# Rule for blender files
+filesystem/%.t3dm: assets/%.glb
+	@mkdir -p $(dir $@)
+	@echo "    [T3D-MODEL] $@"
+	$(T3D_GLTF_TO_3D) "$<" $@
+	$(N64_BINDIR)/mkasset -c 2 -w 256 -o filesystem $@
 
 # Linking the ROM
 $(BUILD_DIR)/$(PROJECT_NAME).dfs: $(assets_conv)

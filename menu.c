@@ -32,8 +32,9 @@ void menu_loop() {
         
         if (btn.a) {
             if(selected_option == 0) {
-            // state = STATE_PLAY; // This will work once state is shared
-        }
+                state = STATE_GAME; // Switch the state!
+                return; // Exit the function immediately
+            }
         }
 
     };

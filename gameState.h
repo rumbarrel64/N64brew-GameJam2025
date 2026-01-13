@@ -1,10 +1,11 @@
-// gameState.h
-#pragma once
+#ifndef GAMESTATE_H
+#define GAMESTATE_H
 
 typedef enum {
     STATE_MENU,
-    STATE_GAME,
-    STATE_EXIT
+    STATE_GAME
 } GameState;
 
 extern GameState state;
+
+#endif
