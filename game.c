@@ -1,6 +1,7 @@
 #include "libs.h"
 #include "gameState.h"
 #include "player.h"
+#include "vault.h"
 
 float get_time_s() {
   return (float)((double)get_ticks_us() / 1000000.0);
@@ -8,13 +9,14 @@ float get_time_s() {
 
 static bool initialized = false;
 static T3DViewport viewport;
-static T3DMat4FP *mapMatFP;
-static T3DModel *modelMap = NULL;
-static Player player; // Our new player object
 static T3DVec3 camPos, camTarget;
 static T3DVec3 lightDirVec = {{1.0f, 1.0f, 1.0f}};
 static rspq_syncpoint_t syncPoint = 0;
 static float lastTime = 0;
+
+// Object Variables
+static Vault vault;
+static Player player;
 
 void play_loop() {
     
@@ -24,10 +26,8 @@ void play_loop() {
         viewport = t3d_viewport_create();
         t3d_vec3_norm(&lightDirVec);
         
-        // Initialize Map
-        mapMatFP = malloc_uncached(sizeof(T3DMat4FP));
-        t3d_mat4fp_from_srt_euler(mapMatFP, (float[3]){0.3f, 0.3f, 0.3f}, (float[3]){0, 0, 0}, (float[3]){0, 0, -10});
-        modelMap = t3d_model_load("rom:/vault.t3dm");
+        // Initialize Vault
+        vault_init(&vault, "rom:/vault.t3dm");
 
         // Initialize Player
         player_init(&player);
@@ -79,14 +79,10 @@ void play_loop() {
     t3d_light_set_count(1);
 
     // Draw vault
-    if(modelMap) {
-        t3d_matrix_push(mapMatFP);
-        t3d_model_draw(modelMap);
-        t3d_matrix_pop(1);
-    }
+    vault_draw(&vault);
 
     // Draw player
-    player_draw(&player); // Draw player
+    player_draw(&player);
 
     // Create sync point for next frame
     syncPoint = rspq_syncpoint_new();
@@ -95,8 +91,11 @@ void play_loop() {
 
      // ======== 4. Game Exit and Cleanup ======== //
     if(btn.start) {
+
+            // Player Cleanup
             player_cleanup(&player);
             // Add map cleanup here
+            vault_cleanup(&vault);
             initialized = false;
             state = STATE_MENU;
         }
