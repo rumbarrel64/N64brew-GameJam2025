@@ -1,2 +1,5 @@
 # Fallout Vault 64
-Repair the vault and earn points
+Game entry for N64brew GameJam 2025
+
+Goal:
+Repair the vault computer and earn points
