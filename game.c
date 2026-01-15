@@ -23,6 +23,8 @@ void play_loop() {
   if (!initialized) {
     
     // ======== 1. Intialize ======== //
+        
+        // Initialize Camera
         viewport = t3d_viewport_create();
         t3d_vec3_norm(&lightDirVec);
         
@@ -49,7 +51,7 @@ void play_loop() {
     // Player Update
     player_update(&player, deltaTime, joy, btn);
 
-    // Update camera to follow player
+    // Update Camera
     camTarget = player.position;
     camTarget.v[2] -= 20;
     camPos.v[0] = camTarget.v[0];
