@@ -19,6 +19,10 @@ static Vault vault;
 static Player player;
 
 void play_loop() {
+
+  // Get memory usage
+heap_stats_t heap_stats;
+sys_get_heap_stats(&heap_stats);
     
   if (!initialized) {
     
@@ -89,9 +93,25 @@ void play_loop() {
     // Create sync point for next frame
     syncPoint = rspq_syncpoint_new();
 
+    // ======== 4. Draw (UI) ======== //
+      
+    float posX = 16;
+    float posY = 24;
+
+    rdpq_sync_pipe();
+
+    posY = 216;
+    
+    // MEMORY TRACKING
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 10, 15, "Mem: %d KiB", heap_stats.used/1024); // get memory usage
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, posX, posY, "FPS: %.2f", display_get_fps()); posY += 10; // Get FPS
+
+    // PLAYER
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, posX, posY, "Slayer Pos. (X, Y): (%.4f, %.4f)", player.position.v[0], player.position.v[2]); posY += 10; //Displays position
+
     rdpq_detach_show();
 
-     // ======== 4. Game Exit and Cleanup ======== //
+     // ======== 5. Game Exit and Cleanup ======== //
     if(btn.start) {
 
             // Player Cleanup

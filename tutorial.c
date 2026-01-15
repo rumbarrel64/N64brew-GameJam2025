@@ -23,7 +23,7 @@ void tutorial_loop() {
     
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 40, "MISSION BRIEFING: VAULT 64");
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 70, "The Vault is Overrun and needs repair! Purge the critters.");
-    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 85, "Collect the parts. Restore the power.");
+    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 85, "Collect the parts. Repair the Computer.");
     
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 130, "CONTROLS:");
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 145, "A: ATTACK");
