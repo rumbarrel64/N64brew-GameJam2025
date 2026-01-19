@@ -1,4 +1,5 @@
 #include "player.h"
+#include "physics.h"
 
 void player_init(Player *p) {
     p->model = t3d_model_load("rom:/falloutGuy.t3dm");
@@ -56,6 +57,9 @@ void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_butto
     p->position.v[0] += p->moveDir.v[0] * p->currSpeed;
     p->position.v[2] += p->moveDir.v[2] * p->currSpeed;
 
+    // Check Physics
+    vault_check(&p->position, 140.0f, 110.0f);
+
     // Update Animations
     t3d_anim_update(&p->animIdle, deltaTime);
     t3d_anim_set_speed(&p->animWalk, p->animBlend + 0.15f);
@@ -69,6 +73,7 @@ void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_butto
     t3d_skeleton_blend(&p->skel, &p->skel, &p->skelBlend, p->animBlend);
     t3d_skeleton_update(&p->skel);
 
+    // Build the matrix using the NEW, corrected position
     t3d_mat4fp_from_srt_euler(p->matrix,
         (float[3]){0.0035f, 0.0035f, 0.0035f},
         (float[3]){0.0f, -p->rotY, 0},

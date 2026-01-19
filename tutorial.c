@@ -2,6 +2,7 @@
 #include "libs.h"
 #include "tutorial.h"
 #include "gameState.h"
+#include "physics.h"
 
 void tutorial_loop() {
     joypad_poll();
