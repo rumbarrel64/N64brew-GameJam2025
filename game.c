@@ -58,10 +58,10 @@ sys_get_heap_stats(&heap_stats);
     lastTime = now;
 
     // Player Update
-    player_update(&player, deltaTime, joy, btn);
+    player_update(&player, deltaTime, joy, btn, spores, 3);
 
     // Spore Update
-    spore_update(spores, 3, deltaTime);
+    spore_update(spores, 3, deltaTime, player.position);
 
     // Update Camera
     camTarget = player.position;

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "libs.h"  // Provides access to T3D, libdragon, etc.
+#include "spore.h"
 
 typedef struct {
     T3DModel *model;
@@ -21,6 +22,6 @@ typedef struct {
 } Player;
 
 void player_init(Player *p);
-void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn);
+void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn, SporePlant *spores, int sporeCount);
 void player_draw(Player *p);
 void player_cleanup(Player *p);

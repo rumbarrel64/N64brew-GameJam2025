@@ -3,7 +3,7 @@
 
 // For now physics will be check in the players and enemies
 
-// Limits a position to a square area centered at 0,0
+// Collision functions
 void vault_check(T3DVec3 *pos, float size, float comp) {
     // Main Walls Check
     if(pos->v[0] < -size) pos->v[0] = -size;
@@ -23,4 +23,21 @@ void vault_check(T3DVec3 *pos, float size, float comp) {
             pos->v[0] = comp;
         }
     }
+}
+
+bool enemy_check(T3DVec3 *pos, T3DVec3 objPos, float radius) {
+    float dx = pos->v[0] - objPos.v[0];
+    float dz = pos->v[2] - objPos.v[2];
+    float distSq = (dx * dx) + (dz * dz);
+
+    if(distSq < (radius * radius) && distSq > 0.01f) {
+        float dist = sqrtf(distSq);
+        float overlap = radius - dist;
+
+        // Push player out
+        pos->v[0] += (dx / dist) * overlap;
+        pos->v[2] += (dz / dist) * overlap;
+        return true;
+    }
+    return false;
 }

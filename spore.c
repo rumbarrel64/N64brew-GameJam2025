@@ -19,20 +19,34 @@ void spore_init(SporePlant *plants, int count) {
     // Set specific positions for our 3 plants
     if(count >= 3) {
         plants[0].position = (T3DVec3){{ 50.0f, 0,  50.0f}};
-        plants[1].position = (T3DVec3){{-50.0f, 0, -80.0f}};
-        plants[2].position = (T3DVec3){{  0.0f, 0, -100.0f}};
+        plants[1].position = (T3DVec3){{-75.0f, 0, 20.0f}}; // eft and down
+        plants[2].position = (T3DVec3){{  0.0f, 0, -100.0f}}; // back wall
     }
 }
 
-void spore_update(SporePlant *plants, int count, float deltaTime) {
+void spore_update(SporePlant *plants, int count, float deltaTime, T3DVec3 playerPos) {
     for(int i = 0; i < count; i++) {
+        
+        // Update animations
         t3d_anim_update(&plants[i].animIdle, deltaTime);
         t3d_skeleton_update(&plants[i].skel);
+
+        // Calculate distance to player (X and Z only)
+        float dx = playerPos.v[0] - plants[i].position.v[0];
+        float dz = playerPos.v[2] - plants[i].position.v[2];
+        float distSq = (dx * dx) + (dz * dz);
+
+        // Check if within radius (60 * 60 = 3600)
+        if(distSq < 3600.0f) {
+            // Calculate angle to look at player
+            // atan2f returns the angle in radians
+            plants[i].rotY = -atan2f(dx, dz) + 4.7123f;
+        }
 
         // Build matrix for each plant
         t3d_mat4fp_from_srt_euler(plants[i].matrix,
             (float[3]){0.3f, 0.3f, 0.3f},
-            (float[3]){0, 0, 0},
+            (float[3]){0, plants[i].rotY, 0}, // Rotate on Y axis
             plants[i].position.v
         );
     }

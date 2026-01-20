@@ -28,7 +28,7 @@ void player_init(Player *p) {
     p->isAttack = false;
 }
 
-void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn) {
+void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn, SporePlant *spores, int sporeCount) {
     // Attack Input
     if((btn.a || btn.b) && !p->animAttack.isPlaying) {
         t3d_anim_set_playing(&p->animAttack, true);
@@ -61,6 +61,9 @@ void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_butto
 
     // Check Physics
     vault_check(&p->position, 140.0f, 110.0f);
+    for(int i = 0; i < sporeCount; i++) {
+        enemy_check(&p->position, spores[i].position, 40.0f);
+    }
 
     // Update Animations
     t3d_anim_update(&p->animIdle, deltaTime);
