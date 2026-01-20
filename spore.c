@@ -40,7 +40,23 @@ void spore_update(SporePlant *plants, int count, float deltaTime, T3DVec3 player
         if(distSq < 3600.0f) {
             // Calculate angle to look at player
             // atan2f returns the angle in radians
-            plants[i].rotY = -atan2f(dx, dz) + 4.7123f;
+            //plants[i].rotY = -atan2f(dx, dz) + 4.7123f;
+
+            // 1. Determine the target angle (where we WANT to face)
+            float targetAngle = -atan2f(dx, dz) + 4.7123f;
+
+            // 2. Find the difference between current and target
+            float angleDiff = targetAngle - plants[i].rotY;
+
+            // 3. Normalize the angle difference so the plant takes the shortest path
+            // This prevents the plant from spinning 350 degrees the wrong way
+            while (angleDiff < -3.14159f) angleDiff += 6.28318f;
+            while (angleDiff >  3.14159f) angleDiff -= 6.28318f;
+
+            // 4. Smoothly interpolate
+            // turnSpeed: 1.0f is slow, 5.0f is fast. Adjust to your liking!
+            float turnSpeed = 3.5f; 
+            plants[i].rotY += angleDiff * turnSpeed * deltaTime;
         }
 
         // Build matrix for each plant
