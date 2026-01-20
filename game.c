@@ -2,6 +2,7 @@
 #include "gameState.h"
 #include "player.h"
 #include "vault.h"
+#include "spore.h"
 
 float get_time_s() {
   return (float)((double)get_ticks_us() / 1000000.0);
@@ -17,6 +18,7 @@ static float lastTime = 0;
 // Object Variables
 static Vault vault;
 static Player player;
+static SporePlant spores[3];
 
 void play_loop() {
 
@@ -38,6 +40,9 @@ sys_get_heap_stats(&heap_stats);
         // Initialize Player
         player_init(&player);
 
+        // Initialize Spores
+        spore_init(spores, 3);
+
         lastTime = get_time_s();
         initialized = true;
     }
@@ -54,6 +59,9 @@ sys_get_heap_stats(&heap_stats);
 
     // Player Update
     player_update(&player, deltaTime, joy, btn);
+
+    // Spore Update
+    spore_update(spores, 3, deltaTime);
 
     // Update Camera
     camTarget = player.position;
@@ -90,6 +98,9 @@ sys_get_heap_stats(&heap_stats);
     // Draw player
     player_draw(&player);
 
+    // Draw Spore
+    spore_draw(spores, 3);
+
     // Create sync point for next frame
     syncPoint = rspq_syncpoint_new();
 
@@ -114,10 +125,10 @@ sys_get_heap_stats(&heap_stats);
      // ======== 5. Game Exit and Cleanup ======== //
     if(btn.start) {
 
-            // Player Cleanup
+            // Cleanup
             player_cleanup(&player);
-            // Add map cleanup here
             vault_cleanup(&vault);
+            spore_cleanup(spores, 3);
             initialized = false;
             state = STATE_MENU;
         }

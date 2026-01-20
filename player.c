@@ -2,6 +2,8 @@
 #include "physics.h"
 
 void player_init(Player *p) {
+    //"catherine.blend" Model from: https://github.com/buu342/N64-Sausage64
+    //License: WTFPL licen
     p->model = t3d_model_load("rom:/falloutGuy.t3dm");
     p->matrix = malloc_uncached(sizeof(T3DMat4FP));
     
