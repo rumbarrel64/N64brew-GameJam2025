@@ -1,4 +1,4 @@
-#include "spore.h"
+#include "sporePlant.h"
 
 static T3DModel *sporeModel = NULL;
 

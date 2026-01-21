@@ -2,7 +2,7 @@
 #include "gameState.h"
 #include "player.h"
 #include "vault.h"
-#include "spore.h"
+#include "sporePlant.h"
 
 float get_time_s() {
   return (float)((double)get_ticks_us() / 1000000.0);

@@ -2,7 +2,7 @@
 #pragma once
 
 #include "libs.h"  // Provides access to T3D, libdragon, etc.
-#include "spore.h"
+#include "sporePlant.h"
 
 typedef struct {
     T3DModel *model;

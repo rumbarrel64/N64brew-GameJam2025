@@ -1,4 +1,4 @@
-// spore.h
+// sporePlant.h
 #pragma once
 
 #include "libs.h"  // Provides access to T3D, libdragon, etc.
