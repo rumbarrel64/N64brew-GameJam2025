@@ -2,7 +2,7 @@
 #include "gameState.h"
 #include "player.h"
 #include "vault.h"
-#include "sporePlant.h"
+#include "spores.h"
 
 float get_time_s() {
   return (float)((double)get_ticks_us() / 1000000.0);
@@ -40,8 +40,8 @@ sys_get_heap_stats(&heap_stats);
         // Initialize Player
         player_init(&player);
 
-        // Initialize Spores
-        spore_init(spores, 3);
+        // Initialize Plants & Spores
+        spores_init(spores, 3);
 
         lastTime = get_time_s();
         initialized = true;
@@ -60,8 +60,8 @@ sys_get_heap_stats(&heap_stats);
     // Player Update
     player_update(&player, deltaTime, joy, btn, spores, 3);
 
-    // Spore Update
-    spore_update(spores, 3, deltaTime, player.position);
+    // Plants and Spores Update
+    spores_update(spores, 3, deltaTime, &player);
 
     // Update Camera
     camTarget = player.position;
@@ -71,7 +71,7 @@ sys_get_heap_stats(&heap_stats);
     camPos.v[2] = camTarget.v[2] + 65;
 
 
-     // ======== 3. Drawing ======== //   
+     // ======== 3. Draw ======== //   
      
      // Wait for RSP to finish previous frame
      if(syncPoint) rspq_syncpoint_wait(syncPoint);
@@ -92,25 +92,26 @@ sys_get_heap_stats(&heap_stats);
     t3d_light_set_directional(0, (uint8_t[4]){0xFF, 0xAA, 0xAA, 0xFF}, &lightDirVec);
     t3d_light_set_count(1);
 
-    // Draw vault
+    // Draw Vault
     vault_draw(&vault);
 
-    // Draw player
+    // Draw Player
     player_draw(&player);
 
-    // Draw Spore
-    spore_draw(spores, 3);
+    // Draw Plants and Spores
+    spores_draw(spores, 3);
 
     // Create sync point for next frame
     syncPoint = rspq_syncpoint_new();
 
+    rdpq_sync_pipe(); 
+    
     // ======== 4. Draw (UI) ======== //
-      
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 200, 15, "Player health: %u", player.health); // Get FPS   
+
+    // DEBUGGING
     float posX = 16;
     float posY = 24;
-
-    rdpq_sync_pipe();
-
     posY = 216;
     
     // MEMORY TRACKING
@@ -128,7 +129,7 @@ sys_get_heap_stats(&heap_stats);
             // Cleanup
             player_cleanup(&player);
             vault_cleanup(&vault);
-            spore_cleanup(spores, 3);
+            spores_cleanup(spores, 3);
             initialized = false;
             state = STATE_MENU;
         }

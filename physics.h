@@ -12,3 +12,8 @@ bool enemy_check(T3DVec3 *pos,
                  T3DVec3 objPos, 
                  float radius
 );
+
+bool projectile_check(T3DVec3 bulletPos, 
+                      T3DVec3 playerPos, 
+                      float radius
+);

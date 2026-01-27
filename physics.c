@@ -41,3 +41,11 @@ bool enemy_check(T3DVec3 *pos, T3DVec3 objPos, float radius) {
     }
     return false;
 }
+
+bool projectile_check(T3DVec3 bulletPos, T3DVec3 playerPos, float radius) {
+    float dx = bulletPos.v[0] - playerPos.v[0];
+    float dz = bulletPos.v[2] - playerPos.v[2];
+    float distSq = (dx * dx) + (dz * dz);
+
+    return (distSq < (radius * radius));
+}

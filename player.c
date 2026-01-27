@@ -1,5 +1,6 @@
 #include "player.h"
 #include "physics.h"
+#include "spores.h"
 
 void player_init(Player *p) {
     //"catherine.blend" Model from: https://github.com/buu342/N64-Sausage64
@@ -26,9 +27,10 @@ void player_init(Player *p) {
     p->rotY = 0.0f;
     p->currSpeed = 0.0f;
     p->isAttack = false;
+    p->health = 5;
 }
 
-void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn, SporePlant *spores, int sporeCount) {
+void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn, struct SporePlant *spores, int sporeCount) {
     // Attack Input
     if((btn.a || btn.b) && !p->animAttack.isPlaying) {
         t3d_anim_set_playing(&p->animAttack, true);
@@ -61,8 +63,41 @@ void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_butto
 
     // Check Physics
     vault_check(&p->position, 140.0f, 110.0f);
+    /*
     for(int i = 0; i < sporeCount; i++) {
         enemy_check(&p->position, spores[i].position, 40.0f);
+    }
+    */
+    for(int i = 0; i < sporeCount; i++) {
+        // Skip plants that are already "dead"
+        if(!spores[i].active) continue;
+
+        // A. Physical collision (Prevents walking through them)
+        enemy_check(&p->position, spores[i].position, 40.0f);
+
+    for(int i = 0; i < sporeCount; i++) {
+        if(!spores[i].active) continue;
+
+            // Physical collision (Prevents walking through them)
+            enemy_check(&p->position, spores[i].position, 40.0f);
+
+            // Radial Damage Check
+            // If attacking and within the active hit frames
+            if(p->isAttack && p->animAttack.time > 0.05f && p->animAttack.time < 0.40f) {
+            
+                float dx = spores[i].position.v[0] - p->position.v[0];
+                float dz = spores[i].position.v[2] - p->position.v[2];
+                float distSq = (dx * dx) + (dz * dz);
+
+                // Distance check only (4900 = 70 units radius)
+                if(distSq < 4900.0f) {
+                    spores[i].health--;
+                
+                    // Jump animation time to 0.41f so it only triggers ONCE per swing
+                    p->animAttack.time = 0.41f; 
+                }
+            }
+        }
     }
 
     // Update Animations
