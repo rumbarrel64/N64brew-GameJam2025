@@ -28,11 +28,12 @@ void player_init(Player *p) {
     p->currSpeed = 0.0f;
     p->isAttack = false;
     p->health = 5;
+    p->repairPartsCount = 0;
 }
 
 void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn, struct SporePlant *spores, int sporeCount) {
     // Attack Input
-    if((btn.a || btn.b) && !p->animAttack.isPlaying) {
+    if((btn.a) && !p->animAttack.isPlaying) {
         t3d_anim_set_playing(&p->animAttack, true);
         t3d_anim_set_time(&p->animAttack, 0.0f);
         p->isAttack = true;

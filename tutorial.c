@@ -2,7 +2,6 @@
 #include "libs.h"
 #include "tutorial.h"
 #include "gameState.h"
-#include "physics.h"
 
 void tutorial_loop() {
     joypad_poll();
@@ -23,8 +22,9 @@ void tutorial_loop() {
     rdpq_fill_rectangle(0, 0, 320, 240);
     
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 40, "MISSION BRIEFING: VAULT 64");
-    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 70, "The Vault is Overrun and needs repair! Purge the critters.");
-    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 85, "Collect the parts. Repair the Computer.");
+    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 70, "The Vault is Overrun and needs repair!");
+    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 85, "Clear the Infestation.");
+    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 100, "Collect the parts. Repair the Computer.");
     
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 130, "CONTROLS:");
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 145, "A: ATTACK");

@@ -3,6 +3,7 @@
 #include "player.h"
 #include "vault.h"
 #include "spores.h"
+#include "computerParts.h"
 
 float get_time_s() {
   return (float)((double)get_ticks_us() / 1000000.0);
@@ -19,6 +20,7 @@ static float lastTime = 0;
 static Vault vault;
 static Player player;
 static SporePlant spores[3];
+static ComputerPart parts[3];
 
 void play_loop() {
 
@@ -43,6 +45,9 @@ sys_get_heap_stats(&heap_stats);
         // Initialize Plants & Spores
         spores_init(spores, 3);
 
+        // Initialize Computer Parts
+        computerParts_init(parts, 3, spores);
+
         lastTime = get_time_s();
         initialized = true;
     }
@@ -62,6 +67,9 @@ sys_get_heap_stats(&heap_stats);
 
     // Plants and Spores Update
     spores_update(spores, 3, deltaTime, &player);
+
+    // Computer Parts Update
+    computerParts_update(parts, 3, &player, spores);
 
     // Update Camera
     camTarget = player.position;
@@ -101,6 +109,9 @@ sys_get_heap_stats(&heap_stats);
     // Draw Plants and Spores
     spores_draw(spores, 3);
 
+    // Draw Computer Parts
+    computerParts_draw(parts, 3, spores);
+
     // Create sync point for next frame
     syncPoint = rspq_syncpoint_new();
 
@@ -124,12 +135,13 @@ sys_get_heap_stats(&heap_stats);
     rdpq_detach_show();
 
      // ======== 5. Game Exit and Cleanup ======== //
-    if(btn.start) {
+    if(btn.start || player.health == 0) {
 
             // Cleanup
             player_cleanup(&player);
             vault_cleanup(&vault);
             spores_cleanup(spores, 3);
+            computerParts_cleanup(parts, 3);
             initialized = false;
             state = STATE_MENU;
         }

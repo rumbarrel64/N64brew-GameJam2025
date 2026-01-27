@@ -20,6 +20,7 @@ typedef struct Player {
     float animBlend;
     bool isAttack;
     int health;
+    int repairPartsCount;
 } Player;
 
 void player_init(Player *p);
