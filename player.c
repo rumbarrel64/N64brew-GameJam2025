@@ -33,7 +33,7 @@ void player_init(Player *p) {
 
 void player_update(Player *p, float deltaTime, joypad_inputs_t joy, joypad_buttons_t btn, struct SporePlant *spores, int sporeCount) {
     // Attack Input
-    if((btn.a) && !p->animAttack.isPlaying) {
+    if((btn.b) && !p->animAttack.isPlaying) {
         t3d_anim_set_playing(&p->animAttack, true);
         t3d_anim_set_time(&p->animAttack, 0.0f);
         p->isAttack = true;

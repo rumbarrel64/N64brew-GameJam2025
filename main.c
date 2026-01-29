@@ -4,6 +4,7 @@
 #include "game.h"
 #include "gameState.h"
 #include "tutorial.h"
+#include "gameaudio.h"
 
 // Set the game state to menu
 GameState state = STATE_MENU;
@@ -20,6 +21,9 @@ int main(void) {
     dfs_init(DFS_DEFAULT_LOCATION); // Essential for the Makefile's filesystem
     asset_init_compression(2);
     t3d_init((T3DInitParams){});
+
+     // Initialize Audio System
+    audio_system_init();
 
     // Load Font Data
     rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));

@@ -27,8 +27,8 @@ void tutorial_loop() {
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 100, "Collect the parts. Repair the Computer.");
     
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 130, "CONTROLS:");
-    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 145, "A: ATTACK");
-    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 160, "B: REPAIR COMPUTER");
+    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 145, "A: REPAIR COMPUTER");
+    rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 160, "B: ATTACK");
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 175, "JOYSTICK: MOVE");
     
     rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 30, 210, "Press START to Begin or B to Go back to Menu");

@@ -15,11 +15,13 @@ src = $(wildcard *.c)
 assets_png = $(wildcard assets/*.png)
 assets_ttf = $(wildcard assets/*.ttf)
 assets_glb = $(wildcard assets/*.glb)
+assets_wav = $(wildcard assets/*.wav) # new code for music
 
 # Conversion logic from your template
 assets_conv = $(addprefix filesystem/,$(notdir $(assets_png:%.png=%.sprite))) \
-              $(addprefix filesystem/,$(notdir $(assets_ttf:%.ttf=%.font64)))\
-              $(addprefix filesystem/,$(notdir $(assets_glb:%.glb=%.t3dm)))
+              $(addprefix filesystem/,$(notdir $(assets_ttf:%.ttf=%.font64))) \
+              $(addprefix filesystem/,$(notdir $(assets_glb:%.glb=%.t3dm))) \
+			  $(addprefix filesystem/,$(notdir $(assets_wav:%.wav=%.wav64))) # new code for music
 
 all: $(PROJECT_NAME).z64
 
@@ -39,6 +41,12 @@ filesystem/%.t3dm: assets/%.glb
 	@echo "    [T3D-MODEL] $@"
 	$(T3D_GLTF_TO_3D) "$<" $@
 	$(N64_BINDIR)/mkasset -c 2 -w 256 -o filesystem $@
+
+# New code for music
+filesystem/%.wav64: assets/%.wav
+	@mkdir -p $(dir $@)
+	@echo "    [AUDIO] $@"
+	@$(N64_AUDIOCONV) --wav-compress 1 --wav-resample 22050 -o filesystem "$<"
 
 # Linking the ROM
 $(BUILD_DIR)/$(PROJECT_NAME).dfs: $(assets_conv)

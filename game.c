@@ -137,8 +137,8 @@ void play_loop() {
       if(!vault.computerRepaired) {
         
         if(player.repairPartsCount >= 3) {
-            rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 100, 100, "Press (B) to Repair Computer");
-            if(btn.b) vault.computerRepaired = true;
+            rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 100, 100, "Press (A) to Repair Computer");
+            if(btn.a) vault.computerRepaired = true;
         } 
         else {
             // Calculate "missing" inline using %d
@@ -149,7 +149,7 @@ void play_loop() {
     rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 100, 15, "Time: (%.4f)", tutorial_time);
 
     // ======== 5. Debugging (UI) ======== //
-    /*
+    //*
     float posX = 16;
     float posY = 24;
     posY = 216;
@@ -157,7 +157,7 @@ void play_loop() {
     // MEMORY TRACKING
     rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 10, 15, "Mem: %d KiB", heap_stats.used/1024); // get memory usage
     rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, posX, posY, "FPS: %.2f", display_get_fps()); posY += 10; // Get FPS
-
+    /*
     // PLAYER
     rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, posX, posY, "Player Pos. (X, Y): (%.4f, %.4f)", player.position.v[0], player.position.v[2]); posY += 10; //Displays position
         rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 200, 45, "Dist to Computer: %.2f", sqrtf( (player.position.v[0]-140)*(player.position.v[0]-140) + (player.position.v[2]-(-140))*(player.position.v[2]-(-140)) ));
