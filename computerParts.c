@@ -14,7 +14,7 @@ void computerParts_init(ComputerPart *parts, int count, SporePlant *plants) {
 
         // Build the matrix once since it doesn't move or rotate
         t3d_mat4fp_from_srt_euler(parts[i].matrix,
-            (float[3]){0.2f, 0.2f, 0.2f}, // Scale
+            (float[3]){0.02f, 0.02f, 0.02f}, // Scale
             (float[3]){0, 0, 0},          // No rotation
             parts[i].position.v           // Position
         );

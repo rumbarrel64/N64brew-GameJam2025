@@ -1,5 +1,5 @@
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
+// gameState.h
+#pragma once
 
 typedef enum {
     STATE_MENU,
@@ -9,4 +9,6 @@ typedef enum {
 
 extern GameState state;
 
-#endif
+// For Score Keeping
+extern float last_tutorial_time;
+extern int last_player_health;

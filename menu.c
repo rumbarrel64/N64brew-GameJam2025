@@ -15,6 +15,14 @@ void menu_loop() {
         // Lock display and clear screen
         surface_t *disp = display_get();
 
+        // 1. Calculate Score
+        int final_score = 0;
+        if (last_player_health > 0) {
+            // Basic formula: Health is weighted heavily, Time reduces score
+            final_score = (last_player_health * 500) - (int)(last_tutorial_time * 5);
+            if (final_score < 0) final_score = 0;
+        };
+
         // Drawing
         graphics_fill_screen(disp, graphics_make_color(0, 0, 50, 255));
         graphics_set_color(graphics_make_color(255, 255, 0, 255), 0);
@@ -22,6 +30,9 @@ void menu_loop() {
         graphics_draw_text(disp, 80, 40, "FALLOUT VAULT 64");
         graphics_draw_text(disp, 100, 100, (selected_option == 0) ? "> START" : "  START");
         graphics_draw_text(disp, 100, 120, (selected_option == 1) ? "> TUTORIAL" : "  TUTORIAL");
+        char score_text[32];
+        snprintf(score_text, sizeof(score_text), "LAST SCORE: %d", final_score);
+        graphics_draw_text(disp, 100, 175, score_text);
 
 
         // Fix: Draw memory stats BEFORE display_show

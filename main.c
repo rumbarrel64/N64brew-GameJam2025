@@ -8,6 +8,10 @@
 // Set the game state to menu
 GameState state = STATE_MENU;
 
+// Initialize shared stats
+float last_tutorial_time = 0.0f;
+int last_player_health = 0;
+
 int main(void) {
     // System Initializations
     display_init(RESOLUTION_320x240, DEPTH_16_BPP, 3, GAMMA_NONE, ANTIALIAS_RESAMPLE);

@@ -11,6 +11,9 @@ void vault_init(Vault *vault, const char *model_path) {
     // Allocate matrix
     vault->matrix = malloc_uncached(sizeof(T3DMat4FP));
 
+    // Computer Repairs
+    vault->computerRepaired = false;
+
     // Default scale and rotation
     float scale[3] = {0.3f, 0.3f, 0.3f};
     float rotation[3] = {0.0f, 0.0f, 0.0f};

@@ -15,6 +15,7 @@ static T3DVec3 camPos, camTarget;
 static T3DVec3 lightDirVec = {{1.0f, 1.0f, 1.0f}};
 static rspq_syncpoint_t syncPoint = 0;
 static float lastTime = 0;
+static float time_offset = 0;
 
 // Object Variables
 static Vault vault;
@@ -25,12 +26,15 @@ static ComputerPart parts[3];
 void play_loop() {
 
   // Get memory usage
-heap_stats_t heap_stats;
-sys_get_heap_stats(&heap_stats);
+  heap_stats_t heap_stats;
+  sys_get_heap_stats(&heap_stats);
     
   if (!initialized) {
     
     // ======== 1. Intialize ======== //
+
+        // At game start:
+        time_offset = get_time_s();  // Capture menu time to subtract
         
         // Initialize Camera
         viewport = t3d_viewport_create();
@@ -53,6 +57,10 @@ sys_get_heap_stats(&heap_stats);
     }
 
     // ======== 2. Update ======== //
+
+    // Get Tutorial Game Time:
+    float tutorial_time = get_time_s() - time_offset; 
+
     joypad_poll();
     joypad_inputs_t joy = joypad_get_inputs(JOYPAD_PORT_1);
     joypad_buttons_t btn = joypad_get_buttons_pressed(JOYPAD_PORT_1);
@@ -118,9 +126,30 @@ sys_get_heap_stats(&heap_stats);
     rdpq_sync_pipe(); 
     
     // ======== 4. Draw (UI) ======== //
-    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 200, 15, "Player health: %u", player.health); // Get FPS   
+    // Player
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 200, 15, "Player health: %u", player.health);
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 200, 30, "Computer Parts: %u", player.repairPartsCount);
+    //rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 216, "Computer Status: %s", vault.computerRepaired ? "REPAIRED" : "BROKEN");
+    // 1. Check Distance first
+    if(sqrtf((player.position.v[0]-140)*(player.position.v[0]-140) + (player.position.v[2]+140)*(player.position.v[2]+140)) <= 33.0f) 
+    {
+      // 2. Only show/do things if not already repaired
+      if(!vault.computerRepaired) {
+        
+        if(player.repairPartsCount >= 3) {
+            rdpq_text_print(NULL, FONT_BUILTIN_DEBUG_MONO, 100, 100, "Press (B) to Repair Computer");
+            if(btn.b) vault.computerRepaired = true;
+        } 
+        else {
+            // Calculate "missing" inline using %d
+            rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 100, 100, "Missing %d computer parts", 3 - player.repairPartsCount);
+        }
+      }
+    };
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 100, 15, "Time: (%.4f)", tutorial_time);
 
-    // DEBUGGING
+    // ======== 5. Debugging (UI) ======== //
+    /*
     float posX = 16;
     float posY = 24;
     posY = 216;
@@ -131,11 +160,17 @@ sys_get_heap_stats(&heap_stats);
 
     // PLAYER
     rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, posX, posY, "Player Pos. (X, Y): (%.4f, %.4f)", player.position.v[0], player.position.v[2]); posY += 10; //Displays position
+        rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 200, 45, "Dist to Computer: %.2f", sqrtf( (player.position.v[0]-140)*(player.position.v[0]-140) + (player.position.v[2]-(-140))*(player.position.v[2]-(-140)) ));
+    */
 
     rdpq_detach_show();
 
      // ======== 5. Game Exit and Cleanup ======== //
-    if(btn.start || player.health == 0) {
+    if(btn.start || player.health == 0 || vault.computerRepaired == true) {
+
+            // SAVE DATA BEFORE IT IS RESET
+            last_tutorial_time = tutorial_time;
+            last_player_health = player.health;
 
             // Cleanup
             player_cleanup(&player);
